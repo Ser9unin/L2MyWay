@@ -1,4 +1,12 @@
-package main
+package currentTime
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/beevik/ntp"
+)
 
 /*
 === Базовая задача ===
@@ -11,7 +19,17 @@ package main
 Программа должна корректно обрабатывать ошибки библиотеки: распечатывать их в STDERR и возвращать ненулевой код выхода в OS.
 Программа должна проходить проверки go vet и golint.
 */
+const myErrExitCode = 101
 
-func main() {
+func currentTime() int {
+	timeNow := time.Now()
+	timeNowNTP, err := ntp.Time("0.beevik-ntp.pool.ntp.org")
+	if err != nil {
+		fmt.Fprint(os.Stderr, err)
+		return myErrExitCode
+	}
 
+	fmt.Println("Время из стандартной библиотеки Time", timeNow)
+	fmt.Println("Время из BeevikNTP", timeNowNTP)
+	return 0
 }
