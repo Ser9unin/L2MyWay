@@ -1,4 +1,4 @@
-module github.com/Ser9unin/L2MyWay
+module github.com/Ser9unin/L2MyWay/develop/dev02
 
 go 1.21.4
 

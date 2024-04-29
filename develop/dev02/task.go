@@ -1,4 +1,4 @@
-package main
+package unpackstring
 
 /*
 === Задача на распаковку ===
