@@ -1,4 +1,4 @@
-module L2MyWay
+module github.com/Ser9unin/L2MyWay
 
 go 1.21.4
 
