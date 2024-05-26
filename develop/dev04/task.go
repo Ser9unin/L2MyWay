@@ -1,4 +1,4 @@
-package main
+package anagram
 
 /*
 === Поиск анаграмм по словарю ===
@@ -19,6 +19,71 @@ package main
 Программа должна проходить все тесты. Код должен проходить проверки go vet и golint.
 */
 
-func main() {
+import (
+	"sort"
+	"strings"
+)
 
+// функция по факту принимает указатель на слайс, т.к. слайс сосотоит из:
+// указателя на массив
+// данных о длине (на сколько заполнен массив)
+// емкости (допустимой вместимости текущего массива)
+func dictionary(src []string) map[string][]string {
+	m := make(map[string][]string)
+	exists := make(map[string]struct{})
+
+	// отдельный слайс создаём что бы не влиять на входные данные
+	arr := make([]string, len(src))
+
+	//	переводим всё в нижний регистр что поиск анаграм был нечувствителен к регистру
+	for i := range src {
+		arr[i] = strings.ToLower(src[i])
+	}
+
+	for i, v := range arr {
+		// создаём map с уникальными значениями
+		if _, ok := exists[v]; !ok {
+			exists[v] = struct{}{}
+		}
+		// после добавления первого слова смещаемся на одно слово вперед и начинае проверку с него
+		for j := i + 1; j < len(arr); j++ {
+			// если ключ есть в exists, нет смысла его проверять на анаграму иначе он будет добавлен к слайсу результатов
+			// и условие на единственное повторение слова не выполнится
+			if _, ok := exists[arr[j]]; ok {
+				continue
+			}
+
+			if anagram(v, arr[j]) {
+				m[v] = append(m[v], arr[j])
+				exists[arr[j]] = struct{}{}
+			}
+		}
+	}
+
+	// если у ключа нет значений, удаляю его, если ключ имеет значения, то сортирую их
+	for k := range m {
+		if len(m[k]) == 1 {
+			delete(m, k)
+		} else {
+			sort.Strings(m[k])
+		}
+	}
+
+	return m
+}
+
+func anagram(word1, word2 string) bool {
+	//если слова не равны то они не могут быть анаграммами
+	if len(word1) != len(word2) {
+		return false
+	}
+
+	// итерируемся по букве в слове 1 и проверяем есть ли такая буква в том же количестве в слове 2
+	for _, v := range word1 {
+		if strings.Count(word1, string(v)) != strings.Count(word2, string(v)) {
+			return false
+		}
+	}
+
+	return true
 }

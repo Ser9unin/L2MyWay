@@ -1,5 +1,12 @@
 package main
 
+import (
+	"log"
+	"os"
+
+	mysort "github.com/Ser9unin/L2MyWay/develop/dev03/pkg"
+)
+
 /*
 === Утилита sort ===
 
@@ -26,5 +33,17 @@ package main
 */
 
 func main() {
+	// собираем конфиг для сортировки
+	args := os.Args[1:]
+	var config mysort.SortCfg
 
+	filepath, err := config.ParseConfig(args)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Читаем строки из файла
+	data, err := mysort.GetDatafromFile(filepath)
+
+	mysort.MySort(config, data)
 }
