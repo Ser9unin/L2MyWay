@@ -1,5 +1,12 @@
 package main
 
+import (
+	"log"
+	"os"
+
+	mygrep "github.com/Ser9unin/L2MyWay/develop/dev05/pkg"
+)
+
 /*
 === Утилита grep ===
 
@@ -19,5 +26,16 @@ package main
 */
 
 func main() {
+	args := os.Args[1:]
+	var config mygrep.GrepCfg
 
+	err := config.ParseConfig(args)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = config.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

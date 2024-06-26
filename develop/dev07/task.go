@@ -1,4 +1,4 @@
-package main
+package orchannel
 
 /*
 === Or channel ===
@@ -33,6 +33,21 @@ start := time.Now()
 fmt.Printf(“fone after %v”, time.Since(start))
 */
 
-func main() {
+func or(channels ...<-chan interface{}) <-chan interface{} {
+	done := make(chan interface{})
 
+	go func() {
+		defer close(done)
+		for {
+			for _, ch := range channels {
+				select {
+				case <-ch:
+					return
+				default:
+				}
+			}
+		}
+	}()
+
+	return done
 }

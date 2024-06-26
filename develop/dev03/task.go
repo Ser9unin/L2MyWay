@@ -44,6 +44,9 @@ func main() {
 
 	// Читаем строки из файла
 	data, err := mysort.GetDatafromFile(filepath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	mysort.MySort(config, data)
 }
